@@ -1,4 +1,4 @@
-# Configuración Básica de Networking  
+# Configuración Básica equipos CISCO `Modulo 2`  
 
 ## Nombres de los Dispositivos  
 
@@ -266,3 +266,63 @@ Guarda cambios en NVRAM para que no se pierdan al reiniciar.
 |-------------------------------------|---------------------------------------|--------------------|---------------------------------------|
 | password (console/vty/enable password) | No (hasta `service password-encryption`) | Baja               | Aceptable si se cifra luego           |
 | enable secret                       | Sí (automático)                       | Alta               | Recomendado siempre                   |
+
+## Configuración de Interfaz Virtual de Switch
+
+Para acceder al switch de manera remota, se deben configurar una dirección IP y una máscara de subred en la SVI. La SVI (Switch Virtual Interface) no es una interfaz física real, sino una virtual. A continuación, se describen los pasos para configurar una SVI en un switch:
+
+1. **Entrar al Modo de Configuración Global:**
+    ```plaintext
+    Sw-Floor-1# configure terminal
+    ```
+
+2. **Configurar la Interfaz VLAN 1:**
+    ```plaintext
+    Sw-Floor-1(config)# interface vlan 1
+    ```
+
+3. **Asignar Dirección IPv4 y Máscara de Subred:**
+    ```plaintext
+    Sw-Floor-1(config-if)# ip address 192.168.1.20 255.255.255.0
+    ```
+
+4. **Habilitar la Interfaz Virtual:**
+    ```plaintext
+    Sw-Floor-1(config-if)# no shutdown
+    ```
+
+5. **Salir de la Configuración de la Interfaz:**
+    ```plaintext
+    Sw-Floor-1(config-if)# exit
+    ```
+
+6. **Configurar la Puerta de Enlace Predeterminada:**
+    ```plaintext
+    Sw-Floor-1(config)# ip default-gateway 192.168.1.1
+    ```
+
+### Verificador de Sintaxis - Configuración de una Interfaz Virtual de Switch
+
+1. **Entrar al Modo de Configuración de la Interfaz VLAN 1:**
+    ```plaintext
+    Switch(config)# interface vlan 1
+    ```
+
+2. **Configurar la Dirección IPv4 y Máscara de Subred:**
+    ```plaintext
+    Switch(config-if)# ip address 192.168.1.20 255.255.255.0
+    ```
+
+3. **Habilitar la Interfaz:**
+    ```plaintext
+    Switch(config-if)# no shutdown
+    ```
+
+    **Mensaje del Sistema:**
+    ```plaintext
+    %LINK-5-CHANGED: Interface Vlan1, changed state to up
+    ```
+
+### Resultado
+
+Con estos pasos, se ha configurado correctamente la interfaz virtual del switch para la VLAN 1, permitiendo la comunicación IPv4 a través de la red.
