@@ -53,3 +53,216 @@ Switch(config-line)# password cisco
 Switch(config-line)# login  
 Switch(config-line)# end  
 ```  
+
+## Ejersicio:
+
+### Entrar al Modo de Configuración Global:
+
+```plaintext
+Switch# configure terminal
+```
+Permite cambiar configuraciones del dispositivo.
+
+### Asignar Nombre al Switch:
+
+```plaintext
+Switch(config)# hostname Sw-Floor-1
+```
+Cambia el nombre por uno único y descriptivo.
+
+### Proteger el Acceso por Consola (Modo EXEC de Usuario):
+
+```plaintext
+Sw-Floor-1(config)# line console 0
+Sw-Floor-1(config-line)# password cisco
+Sw-Floor-1(config-line)# login
+Sw-Floor-1(config-line)# exit
+```
+Pide contraseña al conectar físicamente vía consola.
+
+### Proteger el Modo EXEC Privilegiado (Administrador):
+
+```plaintext
+Sw-Floor-1(config)# enable secret class
+```
+Establece una contraseña encriptada para acceder a todos los comandos del switch.
+
+### Proteger el Acceso Remoto (Líneas VTY 0-15, para Telnet/SSH):
+
+```plaintext
+Sw-Floor-1(config)# line vty 0 15
+Sw-Floor-1(config-line)# password cisco
+Sw-Floor-1(config-line)# login
+Sw-Floor-1(config-line)# exit
+```
+Requiere contraseña para conexiones remotas.
+
+### Encriptar Todas las Contraseñas Visibles en Texto Claro:
+
+```plaintext
+Sw-Floor-1(config)# service password-encryption
+```
+Protege las contraseñas aplicando una encriptación básica.
+
+### Crear un Mensaje de Advertencia (Banner):
+
+```plaintext
+Sw-Floor-1(config)# banner motd #Warning! Authorized access only!#
+```
+Muestra un mensaje legal antes de permitir el acceso al dispositivo.
+
+# Ejersicio Paket Tracer:
+
+## Parte 1: Verificar la Configuración Predeterminada del Switch
+
+### Paso 1: Entrar en Modo EXEC Privilegiado
+
+**Comando:**  
+```plaintext
+enable
+```
+
+**Función:**  
+Permite acceso a todos los comandos administrativos del switch. Se debe proteger con contraseña.
+
+**Cambio Visible:**  
+El prompt cambia de `Switch>` a `Switch#`.
+
+### Paso 2: Examinar Configuración Actual
+
+**Comando:**  
+```plaintext
+show running-config
+```
+
+**Muestra:**  
+Configuración activa en RAM.
+
+**Respuestas:**  
+- **FastEthernet interfaces:** Normalmente 24 (depende del modelo).  
+- **GigabitEthernet interfaces:** Normalmente 2 (uplink).  
+- **Rango VTY:** 0 15 (16 sesiones de acceso remoto por Telnet/SSH).  
+
+**Comando para Ver NVRAM:**  
+```plaintext
+show startup-config
+```
+
+**¿Por qué "startup-config no está presente"?:**  
+Porque no se ha guardado ninguna configuración aún en la NVRAM.
+
+---
+
+## Parte 2: Crear Configuración Básica
+
+### Paso 1: Asignar Nombre al Switch
+
+**Comando:**  
+```plaintext
+hostname S1
+```
+
+**Función:**  
+Cambia el nombre del dispositivo para identificarlo en la red.
+
+### Paso 2: Acceso Seguro a la Línea de Consola
+
+**Comandos:**  
+```plaintext
+line console 0
+password letmein
+login
+```
+
+**Función:**  
+- `line console 0`: Entra a configurar la consola física.  
+- `password letmein`: Asigna contraseña a la consola.  
+- `login`: Obliga a pedir contraseña al acceder por consola.
+
+**Pregunta:**  
+**¿Por qué es necesario el comando `login`?**  
+Porque sin `login`, aunque pongas una contraseña, no se pedirá cuando alguien conecte al switch.
+
+### Paso 3 y 4: Asegurar Acceso a Modo Privilegiado
+
+**Comandos:**  
+```plaintext
+enable password c1$c0
+enable secret itsasecret
+```
+
+**Diferencia:**  
+- `enable password`: Texto plano, poco seguro.  
+- `enable secret`: Encriptado automáticamente, mucho más seguro.
+
+**¿Cuál se recomienda usar?:**  
+Siempre `enable secret`, sobreescribe a `enable password` si ambos existen.
+
+### Paso 5: Verificación
+
+Salir (`exit`) y comprobar que pide contraseñas.
+
+**Nota:**  
+La contraseña de consola se usa primero, luego la de modo privilegiado.
+
+### Paso 6: Cifrar Contraseñas
+
+**Comando:**  
+```plaintext
+service password-encryption
+```
+
+**Función:**  
+Encripta todas las contraseñas en texto plano en el archivo de configuración.
+
+**Pregunta:**  
+**¿Después de este comando las nuevas contraseñas estarán cifradas?**  
+Sí, toda contraseña que configures a partir de ahora se encriptará automáticamente.
+
+---
+
+## Parte 3: Configurar un Banner MOTD
+
+### Paso 1: Configurar Mensaje del Día
+
+**Comando:**  
+```plaintext
+banner motd "This is a secure system. Authorized Access Only!"
+```
+
+**Función:**  
+Muestra un mensaje legal/de advertencia antes de que el usuario inicie sesión.
+
+**¿Cuándo se muestra?:**  
+Cuando alguien se conecta al switch antes de poner usuario/contraseña.
+
+**¿Por qué es importante?:**  
+Sirve como advertencia legal para que los intrusos no aleguen ignorancia.
+
+---
+
+## Parte 4: Guardar y Verificar Configuración
+
+### Paso 1: Guardar Configuración en NVRAM
+
+**Comando:**  
+```plaintext
+copy running-config startup-config
+```
+
+**Función:**  
+Guarda cambios en NVRAM para que no se pierdan al reiniciar.
+
+**Preguntas:**  
+- **Versión abreviada:** `copy run start`  
+- **¿Qué comando muestra NVRAM?:** `show startup-config`  
+- **¿Se registran los cambios?:** Sí, una vez guardado, quedan almacenados permanentemente.
+
+---
+
+## Resumen de Diferencias de Contraseñas
+
+| Tipo de Contraseña                  | ¿Encriptada?                          | Nivel de Seguridad | Uso                                   |
+|-------------------------------------|---------------------------------------|--------------------|---------------------------------------|
+| password (console/vty/enable password) | No (hasta `service password-encryption`) | Baja               | Aceptable si se cifra luego           |
+| enable secret                       | Sí (automático)                       | Alta               | Recomendado siempre                   |
