@@ -1,4 +1,4 @@
-# Configuración de DHCP en un Router Cisco
+# Configuración de DHCP en un Router Cisco `GIA`
 
 Esta configuración es para un router Cisco con IOS, y permite:
 
@@ -64,7 +64,7 @@ Esto es importante porque:
 | Rango de IPs para DHCP    | 172.16.0.100 en adelante    |
 # 
 
-# Notas Adicionales
+## Notas Adicionales
 
 ## ¿Qué es exactamente la Default Gateway?
 
