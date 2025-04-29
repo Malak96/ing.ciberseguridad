@@ -36,7 +36,7 @@ Router0(dhcp-config)# network 172.16.0.0 255.255.0.0
 Router0(dhcp-config)# exit
 ```
 
-- **NOTA:** Esto aun lo vemos en clases.
+
 ```plaintext
 Router0(config)# ip dhcp excluded-address 172.16.0.1 172.16.0.99
 ```
@@ -53,16 +53,18 @@ Esto es importante porque:
 
 ## Resumen de todo 
 
-| Concepto                  | Valor                        |
-|---------------------------|------------------------------|
-| IP de la interfaz         | 172.16.0.1                  |
-| Máscara de red            | 255.255.0.0 (o /16)         |
-| Red configurada           | 172.16.0.0/16               |
-| Default Gateway (DHCP)    | 172.16.0.1                  |
-| DNS Server (DHCP)         | 172.16.0.1                  |
-| IPs excluidas del DHCP    | 172.16.0.1 a 172.16.0.99    |
-| Rango de IPs para DHCP    | 172.16.0.100 en adelante    |
-# 
+
+| **Concepto**              | **Valor**                      | **Comando usado**                                                                 | **Descripción**                                                                 |
+|---------------------------|--------------------------------|------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| IP de la interfaz         | 172.16.0.1                     | `interface vlan 1`<br>`ip address 172.16.0.1 255.255.0.0`                          | Asigna IP y máscara a la interfaz virtual VLAN 1 (administración del switch).         |
+| Máscara de red            | 255.255.0.0 (o /16)            | Incluida en `ip address 172.16.0.1 255.255.0.0`                                    | Define el tamaño de la red (en este caso, clase B).                                   |
+| Red configurada           | 172.16.0.0/16                  | Derivada de la IP y máscara                                                       | Se obtiene automáticamente a partir de IP y máscara asignadas.                        |
+| Default Gateway (DHCP)    | 172.16.0.1                     | `ip dhcp pool <nombre>`<br>`default-router 172.16.0.1`                             | Establece la puerta de enlace que recibirán los clientes DHCP.                        |
+| DNS Server (DHCP)         | 172.16.0.1                     | `ip dhcp pool <nombre>`<br>`dns-server 172.16.0.1`                                 | Establece el servidor DNS que recibirán los clientes.                                 |
+| IPs excluidas del DHCP    | 172.16.0.1 a 172.16.0.99       | `ip dhcp excluded-address 172.16.0.1 172.16.0.99`                                  | Evita que esas IPs sean asignadas por el DHCP; se reservan para uso manual.           |
+| Rango de IPs para DHCP    | 172.16.0.100 en adelante       | `ip dhcp pool <nombre>`<br>`network 172.16.0.0 255.255.0.0`                        | Define el rango de direcciones IP que se entregarán a los clientes DHCP.              |
+
+
 
 ## Notas Adicionales
 
