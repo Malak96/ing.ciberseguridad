@@ -1,4 +1,4 @@
-# Configuración de DHCP en un Router Cisco `GIA`
+## Configuración de DHCP en un Router Cisco `GIA`
 
 Esta configuración es para un router Cisco con IOS, y permite:
 
@@ -8,7 +8,7 @@ Esta configuración es para un router Cisco con IOS, y permite:
 
 ---
 
-## 1. Configuración de la interfaz GigabitEthernet0/0 (G0/0)
+### 1. Configuración de la interfaz GigabitEthernet0/0 (G0/0)
 
 ```plaintext
 Router0(config)# int Gi0/0
@@ -16,7 +16,7 @@ Router0(config-if)# ip add 172.16.0.1 255.255.0.0
 Router0(config-if)# no shut
 ```
 
-### ¿Qué hace?
+#### ¿Qué hace?
 
 - **int Gi0/0**: Entra en la configuración de la interfaz física GigabitEthernet 0/0.
 - **ip add 172.16.0.1 255.255.0.0**: Asigna a esa interfaz la IP `172.16.0.1` con máscara de 16 bits (`255.255.0.0`), es decir, una red grande (65,534 hosts posibles).
@@ -26,7 +26,7 @@ Router0(config-if)# no shut
 
 ---
 
-## 2. Creación de un Pool DHCP llamado `DHCP-POOL-01`
+### 2. Creación de un Pool DHCP llamado `DHCP-POOL-01`
 
 ```plaintext
 Router0(config)# ip dhcp pool DHCP-POOL-01
@@ -41,7 +41,7 @@ Router0(dhcp-config)# exit
 Router0(config)# ip dhcp excluded-address 172.16.0.1 172.16.0.99
 ```
 
-### ¿Qué hace?
+#### ¿Qué hace?
 
 - **ip dhcp excluded-address 172.16.0.1 172.16.0.99**: Indica que las direcciones IP desde `172.16.0.1` hasta `172.16.0.99` no deben ser asignadas por el servidor DHCP.
 
@@ -51,7 +51,7 @@ Esto es importante porque:
 - Las direcciones entre `172.16.0.2` y `172.16.0.99` pueden ser necesarias para dispositivos configurados manualmente, como servidores o impresoras.
 
 
-## Resumen de todo 
+### Resumen de todo 
 
 
 | **Concepto**              | **Valor**                      | **Comando usado**                                                                 | **Descripción**                                                                 |
@@ -66,9 +66,9 @@ Esto es importante porque:
 
 
 
-## Notas Adicionales
+### Notas Adicionales
 
-## ¿Qué es exactamente la Default Gateway?
+### ¿Qué es exactamente la Default Gateway?
 
 La Default Gateway es el dispositivo que sabe hacia dónde enviar los paquetes cuando el destino está fuera de la red local.
 Es como la "puerta de salida" de tu red.
